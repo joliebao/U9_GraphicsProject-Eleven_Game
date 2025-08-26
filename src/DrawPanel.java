@@ -15,16 +15,21 @@ class DrawPanel extends JPanel implements MouseListener {
     private Rectangle button;
 
     public DrawPanel() {
-        button = new Rectangle(147, 100, 160, 26);
+        button = new Rectangle(170, 50, 160, 26);
         this.addMouseListener(this);
         hand = Card.buildHand();
     }
 
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        int x = 50;
-        int y = 10;
+        int x = 145;
+        int y = 0;
         for (int i = 0; i < hand.size(); i++) {
+            if (i % 3 == 0){
+                x = 145;
+                y += 100;
+            }
+
             Card c = hand.get(i);
             if (c.getHighlight()) {
                 // draw the border rectangle around the card
@@ -40,7 +45,7 @@ class DrawPanel extends JPanel implements MouseListener {
         // drawing the bottom button
         // with my favorite font (Courier New!!)
         g.setFont(new Font("Courier New", Font.BOLD, 20));
-        g.drawString("GET NEW CARDS", 150, 120);    // print statement for graphics
+        g.drawString("GET NEW CARDS", 172, 69);    // print statement for graphics
         g.drawRect((int)button.getX(), (int)button.getY(), (int)button.getWidth(), (int)button.getHeight());
     }
 
