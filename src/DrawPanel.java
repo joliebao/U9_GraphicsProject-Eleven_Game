@@ -10,6 +10,7 @@ import java.awt.Font;
 class DrawPanel extends JPanel implements MouseListener {
 
     private ArrayList<Card> hand;
+    private int count = 0;
 
     // Rectangle object represents a rectangle.
     private Rectangle button;
@@ -72,14 +73,24 @@ class DrawPanel extends JPanel implements MouseListener {
 
         // right click
         if (e.getButton() == 3) {
-            for (int i = 0; i < hand.size(); i++) {
-                Rectangle box = hand.get(i).getCardBox();
-                if (box.contains(clicked)) {
-                    hand.get(i).flipHighlight();
+            count++;
+
+            if (count % 2 == 1) {
+                for (int i = 0; i < hand.size(); i++) {
+                    Rectangle box = hand.get(i).getCardBox();
+                    if (box.contains(clicked)) {
+                        hand.get(i).flipHighlight();
+                    }
+                }
+            } else {
+                for (int i = 0; i < hand.size(); i++) {
+                    Rectangle box = hand.get(i).getCardBox();
+                    if (box.contains(clicked)) {
+                        hand.get(i).replaceCard(hand, hand.get(i), i);
+                    }
                 }
             }
         }
-
     }
 
     public void mouseReleased(MouseEvent e) { }

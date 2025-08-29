@@ -115,4 +115,18 @@ public class Card {
         }
         return hand;
     }
+
+    // When the card is right-clicked, the card changes
+    public static ArrayList<Card> replaceCard(ArrayList<Card> hand, Card card, int loc) {
+        ArrayList<Card> deck = Card.buildDeck();
+
+        int r = (int) (Math.random() * deck.size());
+        Card c = deck.remove(r);
+        hand.add(loc, c);
+        hand.remove(loc + 1);
+
+        deck.add(card);
+
+        return hand;
+    }
 }
