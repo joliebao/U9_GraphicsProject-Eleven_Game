@@ -10,13 +10,14 @@ import java.awt.Font;
 class DrawPanel extends JPanel implements MouseListener {
 
     private ArrayList<Card> hand;
-    private int count = 0;
 
     // Rectangle object represents a rectangle.
     private Rectangle button;
+    private Rectangle button2;
 
     public DrawPanel() {
         button = new Rectangle(170, 50, 160, 26);
+        button2 = new Rectangle(170, 381, 160, 26);
         this.addMouseListener(this);
         hand = Card.buildHand();
     }
@@ -46,8 +47,14 @@ class DrawPanel extends JPanel implements MouseListener {
         // drawing the bottom button
         // with my favorite font (Courier New!!)
         g.setFont(new Font("Courier New", Font.BOLD, 20));
-        g.drawString("GET NEW CARDS", 172, 69);    // print statement for graphics
+        g.drawString("RESTART", 208, 69);    // print statement for graphics
         g.drawRect((int)button.getX(), (int)button.getY(), (int)button.getWidth(), (int)button.getHeight());
+
+        // drawing the bottom button
+        // with my favorite font (Courier New!!)
+        g.setFont(new Font("Courier New", Font.BOLD, 20));
+        g.drawString("REPLACE CARDS", 172, 400);    // print statement for graphics
+        g.drawRect((int)button2.getX(), (int)button2.getY(), (int)button2.getWidth(), (int)button2.getHeight());
     }
 
     public void mousePressed(MouseEvent e) {
@@ -73,20 +80,18 @@ class DrawPanel extends JPanel implements MouseListener {
 
         // right click
         if (e.getButton() == 3) {
-            count++;
-
-            if (count % 2 == 1) {
-                for (int i = 0; i < hand.size(); i++) {
-                    Rectangle box = hand.get(i).getCardBox();
-                    if (box.contains(clicked)) {
-                        hand.get(i).flipHighlight();
-                    }
+            for (int i = 0; i < hand.size(); i++) {
+                Rectangle box = hand.get(i).getCardBox();
+                if (box.contains(clicked)) {
+                    hand.get(i).flipHighlight();
                 }
-            } else {
-                for (int i = 0; i < hand.size(); i++) {
-                    Rectangle box = hand.get(i).getCardBox();
-                    if (box.contains(clicked)) {
-                        hand.get(i).replaceCard(hand, hand.get(i), i);
+            }
+
+            if (button2.contains(clicked)) {
+                System.out.println("Poked");
+                for (int i = 0; i < hand.size(); i++){
+                    if (hand.get(i).getHighlight()){
+                        hand = hand.get(i).replaceCard(i); // fix this line of code and the method!
                     }
                 }
             }

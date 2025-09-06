@@ -113,19 +113,21 @@ public class Card {
             Card c = deck.remove(r);
             hand.add(c);
         }
+
         return hand;
     }
 
     // When the card is right-clicked, the card changes
-    public static ArrayList<Card> replaceCard(ArrayList<Card> hand, Card card, int loc) {
+    public static ArrayList<Card> replaceCard(int loc) {
         ArrayList<Card> deck = Card.buildDeck();
+        ArrayList<Card> hand = new ArrayList<Card>();
 
         int r = (int) (Math.random() * deck.size());
         Card c = deck.remove(r);
         hand.add(loc, c);
         hand.remove(loc + 1);
 
-        deck.add(card);
+        deck.add(c);
 
         return hand;
     }
