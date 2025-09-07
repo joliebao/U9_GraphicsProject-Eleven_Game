@@ -86,13 +86,13 @@ class DrawPanel extends JPanel implements MouseListener {
                     hand.get(i).flipHighlight();
                 }
             }
+        }
 
-            if (button2.contains(clicked)) {
-                System.out.println("Poked");
-                for (int i = 0; i < hand.size(); i++){
-                    if (hand.get(i).getHighlight()){
-                        hand = hand.get(i).replaceCard(i); // fix this line of code and the method!
-                    }
+        if (button2.contains(clicked)) {
+            for (int i = 0; i < hand.size(); i++){
+                if (hand.get(i).getHighlight()){
+                    hand = hand.get(i).replaceCard(hand, i); // fix this line of code and the method!
+                    System.out.println(hand);
                 }
             }
         }
