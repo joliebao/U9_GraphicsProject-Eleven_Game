@@ -118,16 +118,22 @@ public class Card {
     }
 
     // When the card is right-clicked, the card changes
-    public static ArrayList<Card> replaceCard(int loc) {
+    public static ArrayList<Card> replaceCard(ArrayList<Card> hand, int loc) {
         ArrayList<Card> deck = Card.buildDeck();
-        ArrayList<Card> hand = new ArrayList<Card>();
+        for (int i = 0; i < deck.size(); i++) {
+            for (int j = 0; j < hand.size(); j++) {
+                if (hand.get(j).getValue().equals(deck.get(i).getValue()) && hand.get(j).getSuit().equals(deck.get(i).getSuit())) {
+                    deck.remove(i);
+                    i--;
+                }
+            }
+        }
 
-        int r = (int) (Math.random() * deck.size());
-        Card c = deck.remove(r);
-        hand.add(loc, c);
-        hand.remove(loc + 1);
-
-        deck.add(c);
+        int r = (int) (Math.random() * deck.size()); // pick random card index
+        Card c1 = deck.remove(r); // save removed index
+        Card c2 = hand.remove(loc); // remove old card
+        hand.add(loc, c1); // add new card
+        deck.add(c2); // add old card
 
         return hand;
     }
