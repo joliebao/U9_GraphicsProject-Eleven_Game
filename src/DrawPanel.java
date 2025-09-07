@@ -23,38 +23,43 @@ class DrawPanel extends JPanel implements MouseListener {
     }
 
     protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        int x = 145;
-        int y = 0;
-        for (int i = 0; i < hand.size(); i++) {
-            if (i % 3 == 0){
-                x = 145;
-                y += 100;
+        if (!Card.win()) {
+            super.paintComponent(g);
+            int x = 145;
+            int y = 0;
+            for (int i = 0; i < hand.size(); i++) {
+                if (i % 3 == 0) {
+                    x = 145;
+                    y += 100;
+                }
+
+                Card c = hand.get(i);
+                if (c.getHighlight()) {
+                    // draw the border rectangle around the card
+                    g.drawRect(x, y, c.getImage().getWidth(), c.getImage().getHeight());
+                }
+                // establish the location of the rectangle "hitbox"
+                c.setRectangleLocation(x, y);
+
+                g.drawImage(c.getImage(), x, y, null);
+                x = x + c.getImage().getWidth() + 10;
             }
 
-            Card c = hand.get(i);
-            if (c.getHighlight()) {
-                // draw the border rectangle around the card
-                g.drawRect(x, y, c.getImage().getWidth(), c.getImage().getHeight());
-            }
-            // establish the location of the rectangle "hitbox"
-            c.setRectangleLocation(x, y);
+            // drawing the bottom button
+            // with my favorite font (Courier New!!)
+            g.setFont(new Font("Courier New", Font.BOLD, 20));
+            g.drawString("RESTART", 208, 69);    // print statement for graphics
+            g.drawRect((int) button.getX(), (int) button.getY(), (int) button.getWidth(), (int) button.getHeight());
 
-            g.drawImage(c.getImage(), x, y, null);
-            x = x + c.getImage().getWidth() + 10;
+            // drawing the bottom button
+            // with my favorite font (Courier New!!)
+            g.setFont(new Font("Courier New", Font.BOLD, 20));
+            g.drawString("REPLACE CARDS", 172, 400);    // print statement for graphics
+            g.drawRect((int) button2.getX(), (int) button2.getY(), (int) button2.getWidth(), (int) button2.getHeight());
+        } else {
+            g.setFont(new Font("Courier New", Font.BOLD, 20));
+            g.drawString("YOU WIN!", 208, 240);
         }
-
-        // drawing the bottom button
-        // with my favorite font (Courier New!!)
-        g.setFont(new Font("Courier New", Font.BOLD, 20));
-        g.drawString("RESTART", 208, 69);    // print statement for graphics
-        g.drawRect((int)button.getX(), (int)button.getY(), (int)button.getWidth(), (int)button.getHeight());
-
-        // drawing the bottom button
-        // with my favorite font (Courier New!!)
-        g.setFont(new Font("Courier New", Font.BOLD, 20));
-        g.drawString("REPLACE CARDS", 172, 400);    // print statement for graphics
-        g.drawRect((int)button2.getX(), (int)button2.getY(), (int)button2.getWidth(), (int)button2.getHeight());
     }
 
     public void mousePressed(MouseEvent e) {
@@ -66,6 +71,7 @@ class DrawPanel extends JPanel implements MouseListener {
             // if "clicked" is inside the button rectangle (did you click the button?)
             if (button.contains(clicked)) {
                 hand = Card.buildHand();
+                Card.resetDeckCount(43);
             }
 
             // go through each card and check if they were clicked on
@@ -89,10 +95,41 @@ class DrawPanel extends JPanel implements MouseListener {
         }
 
         if (button2.contains(clicked)) {
+            int sum = 0;
+            boolean threeRoyals = false;
+            boolean jack = false;
+            boolean queen = false;
+            boolean king = false;
             for (int i = 0; i < hand.size(); i++){
                 if (hand.get(i).getHighlight()){
-                    hand = hand.get(i).replaceCard(hand, i); // fix this line of code and the method!
-                    System.out.println(hand);
+                    int num;
+                    if (hand.get(i).getValue().equals("J")){
+                        num = 11;
+                        jack = true;
+                    } else if (hand.get(i).getValue().equals("Q")){
+                        num = 12;
+                        queen = true;
+                    } else if (hand.get(i).getValue().equals("K")){
+                        num = 13;
+                        king = true;
+                    } else if (hand.get(i).getValue().equals("A")){
+                        num = 1;
+                    } else {
+                        num = Integer.parseInt(hand.get(i).getValue());
+                    }
+                    sum += num;
+
+                    if (king && queen && jack){
+                        threeRoyals = true;
+                    }
+                }
+            }
+
+            for (int i = 0; i < hand.size(); i++){
+                if (hand.get(i).getHighlight() && sum == 11){
+                    hand = hand.get(i).replaceCard(hand, i);
+                } else if (hand.get(i).getHighlight() && threeRoyals){
+                    hand = hand.get(i).replaceCard(hand, i);
                 }
             }
         }

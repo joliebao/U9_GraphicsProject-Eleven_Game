@@ -14,6 +14,8 @@ public class Card {
     private BufferedImage image;
     private Rectangle cardBox;
     private boolean highlight;
+    private static ArrayList<Card> deck = new ArrayList<Card>();
+    private static int deckCount = 52;
 
     public Card(String suit, String value) {
         this.suit = suit;
@@ -114,27 +116,34 @@ public class Card {
             hand.add(c);
         }
 
+        updateDeck(deck);
         return hand;
+    }
+
+    private static void updateDeck(ArrayList<Card> d){
+        deck = d;
     }
 
     // When the card is right-clicked, the card changes
     public static ArrayList<Card> replaceCard(ArrayList<Card> hand, int loc) {
-        ArrayList<Card> deck = Card.buildDeck();
-        for (int i = 0; i < deck.size(); i++) {
-            for (int j = 0; j < hand.size(); j++) {
-                if (hand.get(j).getValue().equals(deck.get(i).getValue()) && hand.get(j).getSuit().equals(deck.get(i).getSuit())) {
-                    deck.remove(i);
-                    i--;
-                }
-            }
-        }
-
         int r = (int) (Math.random() * deck.size()); // pick random card index
         Card c1 = deck.remove(r); // save removed index
-        Card c2 = hand.remove(loc); // remove old card
+        hand.remove(loc); // remove old card
         hand.add(loc, c1); // add new card
-        deck.add(c2); // add old card
 
+        deckCount = deck.size();
         return hand;
+    }
+
+    public static void resetDeckCount(int value){
+        deckCount = value;
+    }
+
+    public static boolean win(){
+        System.out.println(deckCount);
+        if (deckCount == 0){
+            return true;
+        }
+        return false;
     }
 }
